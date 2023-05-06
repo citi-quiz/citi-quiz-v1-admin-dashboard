@@ -1,0 +1,32 @@
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 24px;
+  margin-top: 16px;
+}
+
+.user-email {
+  font-size: 16px;
+  margin-top: 8px;
+  color: #555;
+}
+
+.test-score {
+  font-size: 18px;
+  margin-top: 16px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #eee;
+}

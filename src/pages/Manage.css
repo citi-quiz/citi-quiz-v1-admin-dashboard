@@ -1,0 +1,376 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1;
+  margin: 10px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+  .column {
+    flex-basis: 100%;
+  }
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.list li span {
+  flex-grow: 1;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.buttons button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .list li {
+    flex-wrap: wrap;
+  }
+  .list li span {
+    flex-basis: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search input[type="text"] {
+  width: 300px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.search button {
+  padding: 10px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .search {
+    flex-wrap: wrap;
+  }
+  .search input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .search button {
+    width: 100%;
+  }
+}
+
+/* Style for the input tag */
+
+.my-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  font-size: 16px;
+}
+
+/* Style for the button */
+
+.my-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.edit-box {
+  background-color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.manage-control {
+  margin: 26px;
+}
+
+.user-container {
+  margin: 50px;
+  background-color: #ffffff;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 20px;
+}
+
+.folder {
+  background-color: #eeeeee;
+  padding: 10px;
+  text-align: center;
+  height: 100px;
+  border-radius: 15px;
+}
+
+.avatar-box {
+  width: 150px;
+  height: 150px;
+}
+
+.centered-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dashboard-container {
+  margin: 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+  text-align: center;
+}
+
+.grid-item {
+  background-color: #fdfdfd;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-title-txt {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dashboard-manage-user-details-section {
+  margin: 20px;
+  background-color: #ffffff;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.back-button:hover {
+  background-color: #0062cc;
+}
+
+.back-button i {
+  margin-right: 8px;
+}
+
+.user-details {
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.user-name {
+  margin: 0 0 10px 0;
+}
+
+.user-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-email,
+.user-phone,
+.user-website {
+  width: 50%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.user-email i,
+.user-phone i,
+.user-website i {
+  margin-right: 10px;
+}
+
+.stats-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+  height: 150px;
+}
+
+.stats-card__title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.stats-card__number {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.stats-card__description {
+  font-size: 14px;
+  color: #999;
+}
+
+.grid_stats-dash {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.grid_stats-dash__item {
+  flex-basis: calc(33.33% - 10px);
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  background-color: #0062cc;
+  border-radius: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .grid_stats-dash__item {
+    flex-basis: calc(50% - 10px);
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .grid_stats-dash__item {
+    flex-basis: 100%;
+  }
+}
+
+.grid_sub_stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+.card_gris_stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.card_gris_stats__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.card_gris_stats__name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card_gris_stats__description {
+  font-size: 14px;
+  color: #999;
+}
+
+.admin-control-txt {
+  align-items: start;
+  margin-left: 0px;
+  color: rgb(26, 26, 26);
+}
+
+.manage-questions-and-sets {
+  margin: 20px;
+  background-color: #ffffff;
+  padding: 5px;
+  border-radius: 15px;
+  border-color: rgb(17, 17, 17);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background-color: #eee;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .chip {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+}

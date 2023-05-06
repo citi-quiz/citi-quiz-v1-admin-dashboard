@@ -1,0 +1,65 @@
+@font-face {
+    font-family: poppinsBlack;
+    src: url(../fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+    font-family: poppinsBold;
+    src: url(../fonts/Poppins/Poppins-Bold.ttf);
+}
+@font-face {
+    font-family: poppinsExtraBold;
+    src: url(../fonts/Poppins/Poppins-ExtraBold.ttf);
+}
+@font-face {
+    font-family: poppinsMedium;
+    src: url(../fonts/Poppins/Poppins-Medium.ttf);
+}
+@font-face {
+    font-family: poppinsRegular;
+    src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+
+.poppinsBlack{
+    font-family: "poppinsBlack", sans-serif;
+}
+.poppinsBold{
+    font-family: "poppinsBold", sans-serif;
+}
+.poppinsExtraBold{
+    font-family: "poppinsExtraBold", sans-serif;
+}
+.poppinsMedium{
+    font-family: "poppinsMedium", sans-serif;
+}
+.poppinsRegular{
+    font-family: "poppinsRegular", sans-serif;
+}
+
+.containerPadding1{
+    padding: 10px;
+}
+
+.card-p{
+    margin: 10px;
+}
+
+.cards-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media (max-width: 1400px) {
+    .cards-grid{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media (max-width: 1078px) {
+    .cards-grid{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 738px) {
+    .cards-grid{
+        grid-template-columns: 1fr;
+    }
+}
