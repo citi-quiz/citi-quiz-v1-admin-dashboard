@@ -62,6 +62,39 @@ export const createSetOriginal = (set) => {
     });
 };
 
+export const editSetOriginal = (set, setId) => {
+  return axios
+    .post(`${API_BACKEND_WEB}/sets/update/${setId}`, set)
+    .then((res) => {
+      return res.data.sets;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const disbaleSetOriginal = (set) => {
+  return axios
+    .post(`${API_BACKEND_WEB}/sets/disable`, set)
+    .then((res) => {
+      return res.data.sets;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const enableSetOriginal = (set) => {
+  return axios
+    .post(`${API_BACKEND_WEB}/sets/enable`, set)
+    .then((res) => {
+      return res.data.sets;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 // ?? Question Section ----------------------------
 
 export const createQuestion = (question) => {

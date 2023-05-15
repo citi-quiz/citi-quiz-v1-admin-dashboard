@@ -8,7 +8,10 @@ import {
   createQuestion,
   createSetOriginal,
   deleteQuestionUnderSet,
+  disbaleSetOriginal,
   editQuestionUnderSet,
+  editSetOriginal,
+  enableSetOriginal,
   getAllCategorySets,
   getAllQuestionUnderSet,
   getAllSets,
@@ -352,10 +355,49 @@ function Control() {
 
   const [setNameForEdit, setSetNameForEdit] = useState("");
   const [editSetStatusHere, setEditSetStatusHere] = useState(false);
+  const [wholeSetHere, setWholeSetHere] = useState([]);
   const editSetHandler = (e, set) => {
     e.preventDefault();
     setEditSetStatusHere(true);
     setSetNameForEdit(set.setName);
+    setWholeSetHere(set);
+  };
+
+  const editSetSubmitHandler = (e) => {
+    e.preventDefault();
+    // editSetOriginal(wholeSetHere, wholeSetHere._id)
+    //   .then((res) => {
+    //     console.log(res, wholeSetHere);
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error - ", err);
+    //   });
+  };
+
+  const deleteSetHandler = (e, set) => {
+    e.preventDefault();
+    setWholeSetHere(set);
+    disbaleSetOriginal(set)
+      .then((res) => {
+        console.log("Res Disable - ", res);
+        getAllSetsHereHandler();
+      })
+      .catch((err) => {
+        console.log("Error - ", err);
+      });
+  };
+
+  const enableSetHandler = (e, set) => {
+    e.preventDefault();
+    setWholeSetHere(set);
+    enableSetOriginal(set)
+      .then((res) => {
+        console.log("Res - ", res);
+        getAllSetsHereHandler();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const renderSelectedControl = () => {
@@ -682,13 +724,23 @@ function Control() {
                       >
                         <p>Edit Set</p>
                         {editSetStatusHere ? (
-                          <TextField
-                            onChange={(e) => setSetNameForEdit(e.target.value)}
-                            value={setNameForEdit}
-                            id="outlined-basic"
-                            label="Question Name"
-                            variant="outlined"
-                          />
+                          <>
+                            <TextField
+                              onChange={(e) =>
+                                setSetNameForEdit(e.target.value)
+                              }
+                              value={setNameForEdit}
+                              id="outlined-basic"
+                              label="Question Name"
+                              variant="outlined"
+                            />
+                            <button onClick={(e) => editSetSubmitHandler(e)}>
+                              Update
+                            </button>
+                            <button onClick={() => setEditSetStatusHere(false)}>
+                              Cancel
+                            </button>
+                          </>
                         ) : null}
                       </div>
                       {allSetsDetails &&
@@ -708,7 +760,25 @@ function Control() {
                               <button onClick={(e) => editSetHandler(e, set)}>
                                 Edit
                               </button>
-                              <button>Delete</button>
+                              {set.setDescription === "Disable" ? (
+                                <button
+                                  style={{
+                                    backgroundColor: "#FFFFFF",
+                                  }}
+                                  onClick={(e) => enableSetHandler(e, set)}
+                                >
+                                  Enable
+                                </button>
+                              ) : (
+                                <button
+                                  style={{
+                                    backgroundColor: "#FFA500",
+                                  }}
+                                  onClick={(e) => deleteSetHandler(e, set)}
+                                >
+                                  Disable
+                                </button>
+                              )}
                             </div>
                           </div>
                         ))}
