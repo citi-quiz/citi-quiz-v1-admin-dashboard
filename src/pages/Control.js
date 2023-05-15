@@ -33,6 +33,8 @@ function Control() {
   const [isSuccess, setisSuccess] = useState(false);
   const [isSuccessMsg, setisSuccessMsg] = useState("");
 
+  //Loading
+  const [isLoading, setisLoading] = useState(false);
   // Set
 
   const [setoName, setsetoName] = useState("");
@@ -78,10 +80,12 @@ function Control() {
 
   const createSetHandler = (e) => {
     e.preventDefault();
+    setisLoading(true);
     createCategorySet({ name: setName })
       .then((res) => {
         console.log(res);
         if (res) {
+          setisLoading(false);
           console.log(res.data);
           setisSuccessMsg("Created Category Set Success!!");
           setisSuccess(true);
@@ -98,6 +102,7 @@ function Control() {
 
   const createOriginalSetHandler = (e) => {
     e.preventDefault();
+    setisLoading(true);
     createSetOriginal({
       setName: setoName,
       setDescription: setoDescription,
@@ -108,6 +113,7 @@ function Control() {
       .then((res) => {
         console.log(res);
         if (res) {
+          setisLoading(false);
           setisSuccessMsg("Created Set Success!!");
           setisSuccess(true);
           setsetoName("");
@@ -179,43 +185,73 @@ function Control() {
     setquestionTrueAnswer(findAnswer);
   };
 
+  const [isFieldNotComplete, setisFieldNotComplete] = useState(false);
+
+  useEffect(() => {
+    if (isFieldNotComplete) {
+      setInterval(() => {
+        setisFieldNotComplete(false);
+      }, 3000);
+    }
+  }, [isFieldNotComplete]);
+
   const createQuestionHandler = (e) => {
     e.preventDefault();
-    createQuestion({
-      setUnder: questionSetUnder,
-      questionName: questionName,
-      questionCategory: questionCategory,
-      questionChoices: answerQueueChoices,
-      questionAnswer: questionTrueAnswer,
-      questionDescription: questionDescription,
-      questionImpLink: questionImpLink,
-    })
-      .then((res) => {
-        if (res) {
-          setisSuccessMsg("Question Created Success");
-          setisSuccess(true);
-          setchoiceAnswer("");
-          setquestionCategory("");
-          setquestionSetUnder("");
-          setquestionTrueAnswer("");
-          setanswerQueueChoices("");
-          setquestionDescription("");
-          setquestionImpLink("");
-        }
+    setisLoading(true);
+    if (
+      !questionSetUnder ||
+      !questionName ||
+      !questionCategory ||
+      !answerQueueChoices ||
+      !questionTrueAnswer ||
+      !questionDescription ||
+      !questionImpLink
+    ) {
+      console.log("Question Filed Not Complete");
+      setisFieldNotComplete(true);
+      setisLoading(false);
+    } else {
+      console.log("Question Filed Complete");
+      createQuestion({
+        setUnder: questionSetUnder,
+        questionName: questionName,
+        questionCategory: questionCategory,
+        questionChoices: answerQueueChoices,
+        questionAnswer: questionTrueAnswer,
+        questionDescription: questionDescription,
+        questionImpLink: questionImpLink,
       })
-      .catch((err) => {
-        console.log("Error - ", err);
-      });
+        .then((res) => {
+          if (res) {
+            setisLoading(false);
+            setisSuccessMsg("Question Created Success");
+            setisSuccess(true);
+            setchoiceAnswer("");
+            setquestionName("");
+            setquestionCategory("");
+            setquestionSetUnder("");
+            setquestionTrueAnswer("");
+            setanswerQueueChoices("");
+            setquestionDescription("");
+            setquestionImpLink("");
+          }
+        })
+        .catch((err) => {
+          console.log("Error - ", err);
+        });
+    }
   };
 
   const [questionUnderSet, setQuestionUnderSet] = useState([]);
   const [setIdForQuestion, setSetIdForQuestion] = useState("");
   const getQuestionDetail = (e, setID) => {
     e.preventDefault();
+    setisLoading(true);
     setSetIdForQuestion(setID);
     getAllQuestionUnderSet(setID)
       .then((res) => {
         if (res) {
+          setisLoading(false);
           setQuestionUnderSet(res);
         }
       })
@@ -236,6 +272,8 @@ function Control() {
     setanswerQueueChoices(tempQuestion.questionChoices);
     setquestionDescription(tempQuestion.questionDescription);
     setquestionImpLink(tempQuestion.questionImpLink);
+    console.log(tempQuestion.questionAnswer[0]);
+    setquestionTrueAnswer(tempQuestion.questionAnswer[0]);
     // TODO: Set All State
   };
 
@@ -251,389 +289,199 @@ function Control() {
 
   const updateThisQuestionFromSet = (e) => {
     e.preventDefault();
-    editQuestionUnderSet({
-      setUnder: questionSetUnder,
-      questionName: questionName,
-      questionCategory: questionCategory,
-      questionChoices: answerQueueChoices,
-      questionAnswer: questionTrueAnswer,
-      questionDescription: questionDescription,
-      questionImpLink: questionImpLink,
-      qId: updateQuestionId,
-    })
-      .then((res) => {
-        console.log("res", res);
-        getQuestionDetail(e, setIdForQuestion);
-        setisSuccessMsg("Question Created Success");
-        setisSuccess(true);
-        setchoiceAnswer("");
-        setquestionCategory("");
-        setquestionSetUnder("");
-        setquestionTrueAnswer("");
-        setanswerQueueChoices("");
-        setquestionDescription("");
-        setquestionImpLink("");
+    setisLoading(true);
+    if (
+      !questionSetUnder ||
+      !questionName ||
+      !questionCategory ||
+      !answerQueueChoices ||
+      !questionTrueAnswer ||
+      !questionDescription ||
+      !questionImpLink
+    ) {
+      console.log("Question Filed Not Complete");
+      setisFieldNotComplete(true);
+      setisLoading(false);
+    } else {
+      console.log("Question Filed Complete");
+      editQuestionUnderSet({
+        setUnder: questionSetUnder,
+        questionName: questionName,
+        questionCategory: questionCategory,
+        questionChoices: answerQueueChoices,
+        questionAnswer: questionTrueAnswer,
+        questionDescription: questionDescription,
+        questionImpLink: questionImpLink,
+        qId: updateQuestionId,
       })
-      .catch((err) => {
-        console.log("Error ", err);
-      });
+        .then((res) => {
+          console.log("res", res);
+          setisLoading(false);
+          getQuestionDetail(e, setIdForQuestion);
+          setisSuccessMsg("Question Created Success");
+          setisSuccess(true);
+        })
+        .catch((err) => {
+          console.log("Error ", err);
+        });
+    }
+  };
+
+  // All Loading Section ***************
+  const LoadingSection = () => {
+    if (isLoading)
+      return (
+        <div>
+          <p>Loading....</p>
+        </div>
+      );
+  };
+  // ***********************************
+
+  const clearQuestionFields = (e) => {
+    e.preventDefault();
+    setquestionName("");
+    setchoiceAnswer("");
+    setquestionCategory("");
+    setquestionSetUnder("");
+    setquestionTrueAnswer("");
+    setanswerQueueChoices("");
+    setquestionDescription("");
+    setquestionImpLink("");
+  };
+
+  const [setNameForEdit, setSetNameForEdit] = useState("");
+  const [editSetStatusHere, setEditSetStatusHere] = useState(false);
+  const editSetHandler = (e, set) => {
+    e.preventDefault();
+    setEditSetStatusHere(true);
+    setSetNameForEdit(set.setName);
   };
 
   const renderSelectedControl = () => {
-    switch (alignment) {
-      case "create":
-        return (
-          <div>
-            {onSuccessToast()}
-            <div className="control-container">
-              <div class="grid-container">
-                <div class="grid-item">
-                  <p className="control-sq-title">Create Set Category</p>
-                  <div className="control-set-column">
-                    <TextField
-                      value={setName}
-                      onChange={(e) => setsetName(e.target.value)}
-                      id="standard-basic"
-                      label="Enter the Set's Name"
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="control-set-column">
-                    <TextField
-                      value={setDescription}
-                      style={{ marginTop: 15 }}
-                      onChange={(e) => setsetDescription(e.target.value)}
-                      id="standard-basic"
-                      label="Enter the Set's Description"
-                      variant="outlined"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      className="button-control-btn button-mt"
-                      onClick={createSetHandler}
-                    >
-                      Create
-                    </button>
-                  </div>
-                  <hr></hr>
-                  <div>
-                    <p className="control-sq-title">Create Set</p>
+    if (isFieldNotComplete) {
+      return <div className="alert">Please fill out the required fields.</div>;
+    } else if (isLoading) {
+      return (
+        <div>
+          <p>Loading ....</p>
+        </div>
+      );
+    } else
+      switch (alignment) {
+        case "create":
+          return (
+            <div>
+              {onSuccessToast()}
+              <div className="control-container">
+                <div class="grid-container">
+                  <div class="grid-item">
+                    <p className="control-sq-title">Create Set Category</p>
                     <div className="control-set-column">
                       <TextField
-                        value={setoName}
-                        onChange={(e) => setsetoName(e.target.value)}
+                        value={setName}
+                        onChange={(e) => setsetName(e.target.value)}
                         id="standard-basic"
-                        label="Enter the Set's Name"
+                        label="Enter the Set's Category Name"
                         variant="outlined"
                       />
                     </div>
                     <div className="control-set-column">
                       <TextField
-                        value={setoDescription}
+                        value={setDescription}
                         style={{ marginTop: 15 }}
-                        onChange={(e) => setsetoDescription(e.target.value)}
+                        onChange={(e) => setsetDescription(e.target.value)}
                         id="standard-basic"
-                        label="Enter the Set's Description"
+                        label="Enter the Set's Category Description"
                         variant="outlined"
                       />
                     </div>
-
-                    <Select
-                      sx={{ minWidth: 210 }}
-                      style={{ marginTop: 15 }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={setoCategory}
-                      label="Category"
-                      onChange={(e) => setsetoCategory(e.target.value)}
-                    >
-                      {allSubCategories &&
-                        allSubCategories.map((subcate, index) => {
-                          return (
-                            <MenuItem value={subcate._id}>
-                              {subcate.name}
-                            </MenuItem>
-                          );
-                        })}
-                    </Select>
-                    <div
-                      className="control-set-column"
-                      style={{ marginTop: 15 }}
-                    >
-                      <TextField
-                        value={setoTitle}
-                        onChange={(e) => setsetoTitle(e.target.value)}
-                        id="standard-basic"
-                        label="Enter the Set's Title"
-                        variant="outlined"
-                      />
-                    </div>
-                    <Select
-                      style={{ marginTop: 15 }}
-                      sx={{ minWidth: 210 }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={setoDifficult}
-                      label="Category"
-                      onChange={(e) => setsetoDifficult(e.target.value)}
-                    >
-                      <MenuItem value={"Easy"}>Easy</MenuItem>
-                      <MenuItem value={"Medium"}>Medium</MenuItem>
-                      <MenuItem value={"High"}>High</MenuItem>
-                    </Select>
-                  </div>
-                  <button
-                    className="button-control-btn button-mt"
-                    onClick={createOriginalSetHandler}
-                  >
-                    Create
-                  </button>
-                </div>
-                <div class="grid-item">
-                  <p className="control-sq-title">Create Question</p>
-                  <p>Question Under</p>
-                  <Select
-                    style={{ marginTop: 1, marginBottom: 15 }}
-                    sx={{ minWidth: 210 }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={questionSetUnder}
-                    label="Under Set"
-                    onChange={(e) => setquestionSetUnder(e.target.value)}
-                  >
-                    {allSetsDetails &&
-                      allSetsDetails.map((set, index) => {
-                        return (
-                          <MenuItem value={set._id}>{set.setName}</MenuItem>
-                        );
-                      })}
-                  </Select>
-                  <p>Question Category</p>
-                  <Select
-                    style={{ marginTop: 5, marginBottom: 15, marginLeft: 15 }}
-                    sx={{ minWidth: 210 }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={questionCategory}
-                    label="Under Set"
-                    onChange={(e) => setquestionCategory(e.target.value)}
-                  >
-                    {allSubCategories &&
-                      allSubCategories.map((subcate, index) => {
-                        return (
-                          <MenuItem value={subcate._id}>
-                            {subcate.name}
-                          </MenuItem>
-                        );
-                      })}
-                    {/* <MenuItem value="Political Science">Political Science</MenuItem>
-                                 <MenuItem value="History">History</MenuItem>
-                                 <MenuItem value="Geography">Geography</MenuItem>
-                                 <MenuItem value="Anthropology">Anthropology</MenuItem>
-                                 <MenuItem value="Economical">Economical</MenuItem>
-                                 <MenuItem value="Social Psychology">Social Psychology</MenuItem>
-                                 <MenuItem value="Comparative Law">Comparative Law</MenuItem>
-                                 <MenuItem value="Comparative Religion">Comparative Religion</MenuItem> */}
-                  </Select>
-                  <div>
-                    <TextField
-                      onChange={(e) => setquestionName(e.target.value)}
-                      value={questionName}
-                      id="outlined-basic"
-                      label="Question Name"
-                      variant="outlined"
-                    />
-                  </div>
-                  <div>
-                    <TextField
-                      onChange={(e) => setquestionDescription(e.target.value)}
-                      value={questionDescription}
-                      id="outlined-basic"
-                      label="Question Description"
-                      variant="outlined"
-                    />
-                  </div>
-                  <div>
-                    <TextField
-                      onChange={(e) => setquestionImpLink(e.target.value)}
-                      value={questionImpLink}
-                      id="outlined-basic"
-                      label="Question Imp Link"
-                      variant="outlined"
-                    />
-                  </div>
-                  <div className="control-question-enter-section">
-                    <p>Enter the question choices</p>
-                    {answerQueueChoices &&
-                      answerQueueChoices.map((ans, index) => {
-                        return (
-                          <div style={{ margin: 10 }}>
-                            {ans.answerId === questionTrueAnswer.answerId ? (
-                              <>
-                                <div style={{ textAlign: "center" }}>
-                                  <p
-                                    style={{
-                                      backgroundColor: "#003909",
-                                      width: 80,
-                                      textAlign: "center",
-                                      color: "#FFFFFF",
-                                      borderRadius: 15,
-                                    }}
-                                  >
-                                    {ans.answer}
-                                  </p>
-                                </div>
-                                <button
-                                  className="button-control-btn"
-                                  style={{ marginLeft: 15, marginTop: 6 }}
-                                  onClick={(e) =>
-                                    removeAnswerToQueue(e, ans.answerId)
-                                  }
-                                >
-                                  DELETE
-                                </button>
-                                <button
-                                  className="button-control-btn"
-                                  style={{ marginLeft: 15, marginTop: 6 }}
-                                  onClick={(e) =>
-                                    markAsCorrect(e, ans.answerId)
-                                  }
-                                >
-                                  MARK CORRECT
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                {ans.answer}
-
-                                <button
-                                  className="button-control-btn"
-                                  style={{ marginLeft: 15, marginTop: 6 }}
-                                  onClick={(e) =>
-                                    removeAnswerToQueue(e, ans.answerId)
-                                  }
-                                >
-                                  DELETE
-                                </button>
-                                <button
-                                  className="button-control-btn"
-                                  style={{ marginLeft: 15, marginTop: 6 }}
-                                  onClick={(e) =>
-                                    markAsCorrect(e, ans.answerId)
-                                  }
-                                >
-                                  MARK CORRECT
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        );
-                      })}
-
-                    <TextField
-                      value={choiceAnswer}
-                      onChange={(e) => setchoiceAnswer(e.target.value)}
-                      id="outlined-basic"
-                      label="Question Answers"
-                      variant="outlined"
-                    />
-                    <button
-                      className="button-control-btn"
-                      style={{ marginLeft: 15, marginTop: 6 }}
-                      onClick={addAnswerToQueue}
-                    >
-                      ADD
-                    </button>
-                    <div
-                      style={{
-                        marginTop: 25,
-                      }}
-                    >
+                    <div>
                       <button
-                        onClick={createQuestionHandler}
-                        className="button-control-btn"
-                        style={{
-                          marginLeft: 15,
-                          marginTop: 6,
-                          width: 200,
-                          backgroundColor: "#00813A",
-                        }}
+                        className="button-control-btn button-mt"
+                        onClick={createSetHandler}
                       >
-                        Create Question
+                        Create Set Category
                       </button>
                     </div>
+                    <hr></hr>
+                    <div>
+                      <p className="control-sq-title">Create Set</p>
+                      <div className="control-set-column">
+                        <TextField
+                          value={setoName}
+                          onChange={(e) => setsetoName(e.target.value)}
+                          id="standard-basic"
+                          label="Enter the Set's Name"
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="control-set-column">
+                        <TextField
+                          value={setoDescription}
+                          style={{ marginTop: 15 }}
+                          onChange={(e) => setsetoDescription(e.target.value)}
+                          id="standard-basic"
+                          label="Enter the Set's Description"
+                          variant="outlined"
+                        />
+                      </div>
+
+                      <Select
+                        sx={{ minWidth: 210 }}
+                        style={{ marginTop: 15 }}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={setoCategory}
+                        label="Category"
+                        onChange={(e) => setsetoCategory(e.target.value)}
+                      >
+                        {allSubCategories &&
+                          allSubCategories.map((subcate, index) => {
+                            return (
+                              <MenuItem value={subcate._id}>
+                                {subcate.name}
+                              </MenuItem>
+                            );
+                          })}
+                      </Select>
+                      <div
+                        className="control-set-column"
+                        style={{ marginTop: 15 }}
+                      >
+                        <TextField
+                          value={setoTitle}
+                          onChange={(e) => setsetoTitle(e.target.value)}
+                          id="standard-basic"
+                          label="Enter the Set's Title"
+                          variant="outlined"
+                        />
+                      </div>
+                      <Select
+                        style={{ marginTop: 15 }}
+                        sx={{ minWidth: 210 }}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={setoDifficult}
+                        label="Category"
+                        onChange={(e) => setsetoDifficult(e.target.value)}
+                      >
+                        <MenuItem value={"Easy"}>Easy</MenuItem>
+                        <MenuItem value={"Medium"}>Medium</MenuItem>
+                        <MenuItem value={"High"}>High</MenuItem>
+                      </Select>
+                    </div>
+                    <button
+                      className="button-control-btn button-mt"
+                      onClick={createOriginalSetHandler}
+                    >
+                      Create Set
+                    </button>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case "manage":
-        return (
-          <div
-            style={{
-              marginRight: 26,
-              marginLeft: 26,
-              marginTop: 25,
-            }}
-          >
-            <div className="row">
-              <div className="column">
-                <div className="grid">
-                  <div className="row">
-                    {allSetsDetails &&
-                      allSetsDetails.map((set, index) => (
-                        <div className="column box">
-                          <p
-                            style={{ textAlign: "center" }}
-                            onClick={(e) => getQuestionDetail(e, set._id)}
-                          >
-                            {set.setName}
-                          </p>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              </div>
-              <div class="column">
-                <h5>All Questions</h5>
-                <div>
-                  {questionUnderSet &&
-                    questionUnderSet.map((question, index) => {
-                      return (
-                        <div
-                          style={{
-                            margin: 10,
-                            backgroundColor: "#FFFFFE",
-                          }}
-                        >
-                          <div
-                            onClick={(e) =>
-                              questionEditControl(e, question._id)
-                            }
-                          >
-                            <p>
-                              {" "}
-                              <b>{index + 1}</b> {question.questionName}
-                            </p>
-                            <button
-                              onClick={(e) =>
-                                deleteThisQuestionFromSet(e, question._id)
-                              }
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-              <div class="column">
-                Edit Control
-                <div>
                   <div class="grid-item">
+                    <button onClick={(e) => clearQuestionFields(e)}>
+                      Clear
+                    </button>
                     <p className="control-sq-title">Create Question</p>
                     <p>Question Under</p>
                     <Select
@@ -794,7 +642,7 @@ function Control() {
                         }}
                       >
                         <button
-                          onClick={(e) => updateThisQuestionFromSet(e)}
+                          onClick={createQuestionHandler}
                           className="button-control-btn"
                           style={{
                             marginLeft: 15,
@@ -803,7 +651,7 @@ function Control() {
                             backgroundColor: "#00813A",
                           }}
                         >
-                          Update Question
+                          Create Question
                         </button>
                       </div>
                     </div>
@@ -811,30 +659,310 @@ function Control() {
                 </div>
               </div>
             </div>
-          </div>
-        );
-      case "test":
-        return <TestControl />;
-      default:
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <p
+          );
+        case "manage":
+          return (
+            <div
               style={{
-                fontSize: 18,
-                marginTop: 15,
+                marginRight: 26,
+                marginLeft: 26,
+                marginTop: 25,
               }}
             >
-              Select the option in the tab
-            </p>
-          </div>
-        );
-    }
+              <div className="row">
+                <div className="column">
+                  <div className="grid">
+                    <div className="row">
+                      <div
+                        style={{
+                          backgroundColor: "#FFFFFF",
+                          margin: 5,
+                          padding: 10,
+                        }}
+                      >
+                        <p>Edit Set</p>
+                        {editSetStatusHere ? (
+                          <TextField
+                            onChange={(e) => setSetNameForEdit(e.target.value)}
+                            value={setNameForEdit}
+                            id="outlined-basic"
+                            label="Question Name"
+                            variant="outlined"
+                          />
+                        ) : null}
+                      </div>
+                      {allSetsDetails &&
+                        allSetsDetails.map((set, index) => (
+                          <div className="column box">
+                            <p
+                              style={{ textAlign: "center" }}
+                              onClick={(e) => getQuestionDetail(e, set._id)}
+                            >
+                              {set.setName}
+                            </p>
+                            <div
+                              style={{
+                                margin: 10,
+                              }}
+                            >
+                              <button onClick={(e) => editSetHandler(e, set)}>
+                                Edit
+                              </button>
+                              <button>Delete</button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <h5>All Questions</h5>
+                  <div>
+                    {questionUnderSet &&
+                      questionUnderSet.map((question, index) => {
+                        return (
+                          <div
+                            style={{
+                              margin: 10,
+                              backgroundColor: "#FFFFFE",
+                            }}
+                          >
+                            <div
+                              onClick={(e) =>
+                                questionEditControl(e, question._id)
+                              }
+                            >
+                              <p>
+                                {" "}
+                                <b>{index + 1}</b> {question.questionName}
+                              </p>
+                              <button
+                                onClick={(e) =>
+                                  deleteThisQuestionFromSet(e, question._id)
+                                }
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+                <div class="column">
+                  Edit Control
+                  <div>
+                    <div class="grid-item">
+                      <p className="control-sq-title">Create Question</p>
+
+                      <p>Question Under</p>
+
+                      <Select
+                        style={{ marginTop: 1, marginBottom: 15 }}
+                        sx={{ minWidth: 210 }}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={questionSetUnder}
+                        label="Under Set"
+                        onChange={(e) => setquestionSetUnder(e.target.value)}
+                      >
+                        {allSetsDetails &&
+                          allSetsDetails.map((set, index) => {
+                            return (
+                              <MenuItem value={set._id}>{set.setName}</MenuItem>
+                            );
+                          })}
+                      </Select>
+                      <p>Question Category</p>
+                      <Select
+                        style={{
+                          marginTop: 5,
+                          marginBottom: 15,
+                          marginLeft: 15,
+                        }}
+                        sx={{ minWidth: 210 }}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={questionCategory}
+                        label="Under Set"
+                        onChange={(e) => setquestionCategory(e.target.value)}
+                      >
+                        {allSubCategories &&
+                          allSubCategories.map((subcate, index) => {
+                            return (
+                              <MenuItem value={subcate._id}>
+                                {subcate.name}
+                              </MenuItem>
+                            );
+                          })}
+                        {/* <MenuItem value="Political Science">Political Science</MenuItem>
+                                 <MenuItem value="History">History</MenuItem>
+                                 <MenuItem value="Geography">Geography</MenuItem>
+                                 <MenuItem value="Anthropology">Anthropology</MenuItem>
+                                 <MenuItem value="Economical">Economical</MenuItem>
+                                 <MenuItem value="Social Psychology">Social Psychology</MenuItem>
+                                 <MenuItem value="Comparative Law">Comparative Law</MenuItem>
+                                 <MenuItem value="Comparative Religion">Comparative Religion</MenuItem> */}
+                      </Select>
+                      <div>
+                        <TextField
+                          onChange={(e) => setquestionName(e.target.value)}
+                          value={questionName}
+                          id="outlined-basic"
+                          label="Question Name"
+                          variant="outlined"
+                        />
+                      </div>
+                      <div>
+                        <TextField
+                          onChange={(e) =>
+                            setquestionDescription(e.target.value)
+                          }
+                          value={questionDescription}
+                          id="outlined-basic"
+                          label="Question Description"
+                          variant="outlined"
+                        />
+                      </div>
+                      <div>
+                        <TextField
+                          onChange={(e) => setquestionImpLink(e.target.value)}
+                          value={questionImpLink}
+                          id="outlined-basic"
+                          label="Question Imp Link"
+                          variant="outlined"
+                        />
+                      </div>
+                      <div className="control-question-enter-section">
+                        <p>Enter the question choices</p>
+                        {answerQueueChoices &&
+                          answerQueueChoices.map((ans, index) => {
+                            return (
+                              <div style={{ margin: 10 }}>
+                                {ans.answerId ===
+                                questionTrueAnswer.answerId ? (
+                                  <>
+                                    <div style={{ textAlign: "center" }}>
+                                      <p
+                                        style={{
+                                          backgroundColor: "#003909",
+                                          width: 80,
+                                          textAlign: "center",
+                                          color: "#FFFFFF",
+                                          borderRadius: 15,
+                                        }}
+                                      >
+                                        {ans.answer}
+                                      </p>
+                                    </div>
+                                    <button
+                                      className="button-control-btn"
+                                      style={{ marginLeft: 15, marginTop: 6 }}
+                                      onClick={(e) =>
+                                        removeAnswerToQueue(e, ans.answerId)
+                                      }
+                                    >
+                                      DELETE
+                                    </button>
+                                    <button
+                                      className="button-control-btn"
+                                      style={{ marginLeft: 15, marginTop: 6 }}
+                                      onClick={(e) =>
+                                        markAsCorrect(e, ans.answerId)
+                                      }
+                                    >
+                                      MARK CORRECT
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    {ans.answer}
+
+                                    <button
+                                      className="button-control-btn"
+                                      style={{ marginLeft: 15, marginTop: 6 }}
+                                      onClick={(e) =>
+                                        removeAnswerToQueue(e, ans.answerId)
+                                      }
+                                    >
+                                      DELETE
+                                    </button>
+                                    <button
+                                      className="button-control-btn"
+                                      style={{ marginLeft: 15, marginTop: 6 }}
+                                      onClick={(e) =>
+                                        markAsCorrect(e, ans.answerId)
+                                      }
+                                    >
+                                      MARK CORRECT
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            );
+                          })}
+
+                        <TextField
+                          value={choiceAnswer}
+                          onChange={(e) => setchoiceAnswer(e.target.value)}
+                          id="outlined-basic"
+                          label="Question Answers"
+                          variant="outlined"
+                        />
+                        <button
+                          className="button-control-btn"
+                          style={{ marginLeft: 15, marginTop: 6 }}
+                          onClick={addAnswerToQueue}
+                        >
+                          ADD
+                        </button>
+                        <div
+                          style={{
+                            marginTop: 25,
+                          }}
+                        >
+                          <button
+                            onClick={(e) => updateThisQuestionFromSet(e)}
+                            className="button-control-btn"
+                            style={{
+                              marginLeft: 15,
+                              marginTop: 6,
+                              width: 200,
+                              backgroundColor: "#00813A",
+                            }}
+                          >
+                            Update Question
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        case "test":
+          return <TestControl />;
+        default:
+          return (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 18,
+                  marginTop: 15,
+                }}
+              >
+                Select the option in the tab
+              </p>
+            </div>
+          );
+      }
   };
 
   return (

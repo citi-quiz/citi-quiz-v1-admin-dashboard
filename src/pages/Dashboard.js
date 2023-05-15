@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import Chart from "../components/Chart";
 import {
   getAllQuestions,
   getAllSets,
@@ -90,6 +91,7 @@ function Dashboard() {
             >
               Bar Chart
             </h1>
+            <Chart />
           </div>
         </div>
         <div className="grid_stats-dash">
