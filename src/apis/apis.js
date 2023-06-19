@@ -183,3 +183,19 @@ export const getAllTests = () => {
 };
 
 // ?? ------------------------------------------------
+
+// ?? ------------------------------------------------
+
+// Notification
+export const sendNotificationsToUsers = (nofity) => {
+  return axios
+    .post(`${API_BACKEND_WEB}/notification/create`, nofity)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log("Error -", err);
+    });
+};
+
+// ------------------------

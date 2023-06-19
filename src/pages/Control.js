@@ -108,10 +108,10 @@ function Control() {
     setisLoading(true);
     createSetOriginal({
       setName: setoName,
-      setDescription: setoDescription,
-      setCategory: setoCategory,
-      setTitle: setoTitle,
-      setDifficult: setoDifficult,
+      setDescription: "Set Description",
+      setCategory: "setoCategory",
+      setTitle: setoName,
+      setDifficult: "Easy",
     })
       .then((res) => {
         console.log(res);
@@ -229,14 +229,14 @@ function Control() {
             setisLoading(false);
             setisSuccessMsg("Question Created Success");
             setisSuccess(true);
-            setchoiceAnswer("");
-            setquestionName("");
-            setquestionCategory("");
-            setquestionSetUnder("");
-            setquestionTrueAnswer("");
-            setanswerQueueChoices("");
-            setquestionDescription("");
-            setquestionImpLink("");
+            // setchoiceAnswer("");
+            // setquestionName("");
+            // setquestionCategory("");
+            // setquestionSetUnder("");
+            // setquestionTrueAnswer("");
+            // setanswerQueueChoices("");
+            // setquestionDescription("");
+            // setquestionImpLink("");
           }
         })
         .catch((err) => {
@@ -376,10 +376,12 @@ function Control() {
 
   const deleteSetHandler = (e, set) => {
     e.preventDefault();
+    setisLoading(true);
     setWholeSetHere(set);
     disbaleSetOriginal(set)
       .then((res) => {
         console.log("Res Disable - ", res);
+        setisLoading(false);
         getAllSetsHereHandler();
       })
       .catch((err) => {
@@ -389,10 +391,12 @@ function Control() {
 
   const enableSetHandler = (e, set) => {
     e.preventDefault();
+    setisLoading(true);
     setWholeSetHere(set);
     enableSetOriginal(set)
       .then((res) => {
         console.log("Res - ", res);
+        setisLoading(false);
         getAllSetsHereHandler();
       })
       .catch((err) => {
@@ -458,7 +462,7 @@ function Control() {
                           variant="outlined"
                         />
                       </div>
-                      <div className="control-set-column">
+                      {/* <div className="control-set-column">
                         <TextField
                           value={setoDescription}
                           style={{ marginTop: 15 }}
@@ -467,9 +471,9 @@ function Control() {
                           label="Enter the Set's Description"
                           variant="outlined"
                         />
-                      </div>
+                      </div> */}
 
-                      <Select
+                      {/* <Select
                         sx={{ minWidth: 210 }}
                         style={{ marginTop: 15 }}
                         labelId="demo-simple-select-label"
@@ -486,8 +490,8 @@ function Control() {
                               </MenuItem>
                             );
                           })}
-                      </Select>
-                      <div
+                      </Select> */}
+                      {/* <div
                         className="control-set-column"
                         style={{ marginTop: 15 }}
                       >
@@ -498,8 +502,8 @@ function Control() {
                           label="Enter the Set's Title"
                           variant="outlined"
                         />
-                      </div>
-                      <Select
+                      </div> */}
+                      {/* <Select
                         style={{ marginTop: 15 }}
                         sx={{ minWidth: 210 }}
                         labelId="demo-simple-select-label"
@@ -511,7 +515,7 @@ function Control() {
                         <MenuItem value={"Easy"}>Easy</MenuItem>
                         <MenuItem value={"Medium"}>Medium</MenuItem>
                         <MenuItem value={"High"}>High</MenuItem>
-                      </Select>
+                      </Select> */}
                     </div>
                     <button
                       className="button-control-btn button-mt"
@@ -723,25 +727,6 @@ function Control() {
                         }}
                       >
                         <p>Edit Set</p>
-                        {editSetStatusHere ? (
-                          <>
-                            <TextField
-                              onChange={(e) =>
-                                setSetNameForEdit(e.target.value)
-                              }
-                              value={setNameForEdit}
-                              id="outlined-basic"
-                              label="Question Name"
-                              variant="outlined"
-                            />
-                            <button onClick={(e) => editSetSubmitHandler(e)}>
-                              Update
-                            </button>
-                            <button onClick={() => setEditSetStatusHere(false)}>
-                              Cancel
-                            </button>
-                          </>
-                        ) : null}
                       </div>
                       {allSetsDetails &&
                         allSetsDetails.map((set, index) => (
