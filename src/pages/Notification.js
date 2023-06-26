@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Grid, Select, MenuItem } from "@mui/material";
-import { getAllSets, sendNotificationsToUsers } from "../apis/apis";
+import { getAllNotification, getAllSets, sendNotificationsToUsers } from "../apis/apis";
 
 function Notification() {
   const [notificationTitle, setNotificationTitle] = useState("");
@@ -25,6 +25,9 @@ function Notification() {
       .then((res) => {
         if (res) {
           setNotificationSentStatus(true);
+          setNotificationTitle("");
+          setNotificationMessage("");
+          setNotificationLink("");
         }
       })
       .catch((err) => {
@@ -32,6 +35,19 @@ function Notification() {
         setNotificationSentStatus(false);
       });
   };
+
+
+  const [allNotificationHere, setAllNotificationHere] = useState([]);
+  const getAllNotifications = () => {
+    getAllNotification().then((res) => {
+      console.log("Notification All - ", res.data.allNotifications);
+      setAllNotificationHere(res.data.allNotifications);
+    })
+  }
+
+  useEffect(() => {
+    getAllNotifications()
+  },[notificationSentStatus])
 
   const [allSetsDetails, setallSetsDetails] = useState([]);
   const getAllSetsHereHandler = () => {
@@ -134,21 +150,17 @@ function Notification() {
             <Grid item xs={12} md={6}>
               {/* Content for the second column */}
               <div className="column-content">
-                <h2>Column 2</h2>
-                <p
-                  style={{
-                    marginLeft: 20,
-                  }}
-                >
-                  Enter the notification message
-                </p>
-                <p
-                  style={{
-                    marginLeft: 20,
-                  }}
-                >
-                  Enter the notification message
-                </p>
+                <h2>All Notifications Here</h2>
+                
+                <div>
+                  {allNotificationHere.length > 0 && allNotificationHere.map((notify, index) => {
+                    console.log('notify - '. notify);
+                    return <p>
+                      Notify {notify.notificationTitle}
+                    </p>
+                  })
+                  }
+                </div>
               </div>
             </Grid>
           </Grid>

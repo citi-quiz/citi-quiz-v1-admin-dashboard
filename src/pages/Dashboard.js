@@ -54,7 +54,8 @@ function Dashboard() {
           height="600px"
         ></iframe>
       </div> */}
-      <div
+      {allUsers.length > 0 ? (
+        <div
         style={{
           position: "relative",
         }}
@@ -100,6 +101,8 @@ function Dashboard() {
           <div className="grid_stats-dash__item"></div>
         </div>
       </div>
+      ) : (<p>Loading ...</p>)}
+      
     </div>
   );
 }

@@ -198,4 +198,14 @@ export const sendNotificationsToUsers = (nofity) => {
     });
 };
 
+export const getAllNotification = () => {
+  return axios.get(`${API_BACKEND_WEB}/get/all/notification`)
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    console.log("Error -", err);
+  });
+}
+
 // ------------------------
