@@ -31,7 +31,7 @@ function Control() {
   // Set Category
 
   const [setName, setsetName] = React.useState("");
-  const [setDescription, setsetDescription] = React.useState("");
+  const [setDescription, setsetDescription] = React.useState("Description");
 
   const [isSuccess, setisSuccess] = useState(false);
   const [isSuccessMsg, setisSuccessMsg] = useState("");
@@ -157,7 +157,7 @@ function Control() {
   const [questionName, setquestionName] = useState("");
   const [questionTrueAnswer, setquestionTrueAnswer] = useState("");
   const [answerQueueChoices, setanswerQueueChoices] = useState([]);
-  const [questionImpLink, setquestionImpLink] = useState("");
+  const [questionImpLink, setquestionImpLink] = useState("https://citi-quiz.netlify.app/");
   const [questionDescription, setquestionDescription] = useState("");
   var questionChoicesList = [];
   const addAnswerToQueue = (e) => {
@@ -229,14 +229,14 @@ function Control() {
             setisLoading(false);
             setisSuccessMsg("Question Created Success");
             setisSuccess(true);
-            // setchoiceAnswer("");
-            // setquestionName("");
-            // setquestionCategory("");
-            // setquestionSetUnder("");
-            // setquestionTrueAnswer("");
-            // setanswerQueueChoices("");
-            // setquestionDescription("");
-            // setquestionImpLink("");
+            setchoiceAnswer("");
+            setquestionName("");
+            setquestionCategory("");
+            setquestionSetUnder("");
+            setquestionTrueAnswer("");
+            setanswerQueueChoices("");
+            setquestionDescription("");
+            setquestionImpLink("");
           }
         })
         .catch((err) => {
@@ -422,36 +422,7 @@ function Control() {
               <div className="control-container">
                 <div class="grid-container">
                   <div class="grid-item">
-                    <p className="control-sq-title">Create Set Category</p>
-                    <div className="control-set-column">
-                      <TextField
-                        value={setName}
-                        onChange={(e) => setsetName(e.target.value)}
-                        id="standard-basic"
-                        label="Enter the Set's Category Name"
-                        variant="outlined"
-                      />
-                    </div>
-                    <div className="control-set-column">
-                      <TextField
-                        value={setDescription}
-                        style={{ marginTop: 15 }}
-                        onChange={(e) => setsetDescription(e.target.value)}
-                        id="standard-basic"
-                        label="Enter the Set's Category Description"
-                        variant="outlined"
-                      />
-                    </div>
-                    <div>
-                      <button
-                        className="button-control-btn button-mt"
-                        onClick={createSetHandler}
-                      >
-                        Create Set Category
-                      </button>
-                    </div>
-                    <hr></hr>
-                    <div>
+                  <div>
                       <p className="control-sq-title">Create Set</p>
                       <div className="control-set-column">
                         <TextField
@@ -523,6 +494,37 @@ function Control() {
                     >
                       Create Set
                     </button>
+                    <hr></hr>
+
+                    <p className="control-sq-title">Create Question Category</p>
+                    <div className="control-set-column">
+                      <TextField
+                        value={setName}
+                        onChange={(e) => setsetName(e.target.value)}
+                        id="standard-basic"
+                        label="Enter the Question's Category Name"
+                        variant="outlined"
+                      />
+                    </div>
+                    <div className="control-set-column">
+                      {/* <TextField
+                        value={setDescription}
+                        style={{ marginTop: 15 }}
+                        onChange={(e) => setsetDescription("description")}
+                        id="standard-basic"
+                        label="Enter the Set's Category Description"
+                        variant="outlined"
+                      /> */}
+                    </div>
+                    <div>
+                      <button
+                        className="button-control-btn button-mt"
+                        onClick={createSetHandler}
+                      >
+                        Create Set Category
+                      </button>
+                    </div>
+                    
                   </div>
                   <div class="grid-item">
                     <button onClick={(e) => clearQuestionFields(e)}>
@@ -587,7 +589,7 @@ function Control() {
                         onChange={(e) => setquestionDescription(e.target.value)}
                         value={questionDescription}
                         id="outlined-basic"
-                        label="Question Description"
+                        label="Question Answer Description"
                         variant="outlined"
                       />
                     </div>
