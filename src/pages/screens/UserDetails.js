@@ -26,9 +26,20 @@ function UserDetails() {
 
   return (
     <div>
+      <h3   style={{
+          textAlign:'center',
+          marginTop: 12
+        }}>
       User Profile Details
-      <div className="user-avatar">
+      </h3>
+      <div className="user-avatar"   style={{
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
         <Avatar
+        style={{
+          marginLeft:'195vh'
+        }}
           sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
           alt="Remy Sharp"
           src="/broken-image.jpg"
@@ -37,9 +48,10 @@ function UserDetails() {
           {userDetails.name}
         </Avatar>
       </div>
-      <p className="user-name">{userDetails.name}</p>
-      <p className="user-name">{userDetails.email}</p>
-      <p className="test-score">{userDetails.totalScore}</p>
+      <p className="user-name" style={{textAlign: 'center'}}>{userDetails.name}</p>
+      <p className="user-name" style={{textAlign: 'center'}}>{userDetails.email}</p>
+      <p className="test-score" style={{textAlign: 'center'}}>No. Test Attended - <b>{userDetails.totalScore}</b></p>
+      <p className="test-score" style={{textAlign: 'center'}}>User Token - <b>{userDetails.user_temp_id}</b></p>
     </div>
   );
 }
