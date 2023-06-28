@@ -208,4 +208,14 @@ export const getAllNotification = () => {
   });
 }
 
+export const deleteNotificationHere = (notification) => {
+  return axios
+  .delete(`${API_BACKEND_WEB}/notification/delete`,{data: notification})
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    console.log("Error -", err);
+  });
+}
 // ------------------------

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Grid, Select, MenuItem } from "@mui/material";
-import { getAllNotification, getAllSets, sendNotificationsToUsers } from "../apis/apis";
+import { deleteNotificationHere, getAllNotification, getAllSets, sendNotificationsToUsers } from "../apis/apis";
 
 function Notification() {
   const [notificationTitle, setNotificationTitle] = useState("");
@@ -45,10 +45,6 @@ function Notification() {
     })
   }
 
-  useEffect(() => {
-    getAllNotifications()
-  },[notificationSentStatus])
-
   const [allSetsDetails, setallSetsDetails] = useState([]);
   const getAllSetsHereHandler = () => {
     getAllSets()
@@ -63,9 +59,30 @@ function Notification() {
       });
   };
 
+  const [notificationStatus, setNotificationStatus] = useState(false);
+
   useEffect(() => {
     getAllSetsHereHandler();
   }, []);
+
+  
+  useEffect(() => {
+    getAllNotifications()
+  },[notificationSentStatus, notificationStatus])
+
+
+  const deleteNotification = (e, notify) => {
+    e.preventDefault();
+    deleteNotificationHere({notifiId: notify}).then((res) => {
+      if(res){
+        console.log(res);
+        setNotificationStatus(!notificationStatus)
+      } 
+
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <div
@@ -155,9 +172,13 @@ function Notification() {
                 <div>
                   {allNotificationHere.length > 0 && allNotificationHere.map((notify, index) => {
                     console.log('notify - '. notify);
-                    return <p>
-                      Notify {notify.notificationTitle}
+                    return <><p>
+                      {index + 1} {notify.notificationTitle}
                     </p>
+                    <button onClick={(e) => deleteNotification(e, notify)}>
+                      Delete
+                    </button>
+                    </>
                   })
                   }
                 </div>
