@@ -104,6 +104,19 @@ export const enableSetOriginal = (set) => {
         });
 };
 
+// ----------------- Edit Set Name ---------------
+
+
+export const editSetName = (set) => {
+    return axios.put(`${API_BACKEND_WEB}/set/edit`, {
+        set
+    }).then((res) => {
+        return res
+    }).catch((error) => {
+        console.log("Error - ", error);
+    });
+}
+
 // ?? Question Section ----------------------------
 
 export const createQuestion = (question) => {

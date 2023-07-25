@@ -10,6 +10,7 @@ import {
   deleteQuestionUnderSet,
   disbaleSetOriginal,
   editQuestionUnderSet,
+  editSetName,
   editSetOriginal,
   enableSetOriginal,
   getAllCategorySets,
@@ -404,6 +405,57 @@ function Control() {
       });
   };
 
+  const [activateEditSetName, setactivateEditSetName] = useState(false);
+  const [setNameEdit, setsetNameEdit] = useState("");
+  const [setNameId, setsetNameId] = useState("");
+
+  const submitSetNameEditHandler = (e) => {
+      e.preventDefault();
+      editSetName({setNameEdit, setNameId}).then((res) => {
+        console.log("Res - ", res);
+      }).catch((err) => {
+        console.log("Error - ", err);
+      }); 
+  }
+
+  const editSetNameHandler = (e, set) => {
+      e.preventDefault();
+      console.log("Set -> ", set._id);
+      setsetNameEdit(set.setName);
+      setsetNameId(set);
+    }
+
+  const renderEditSetName = () => {
+      return(
+        <div>
+          <TextField
+                          value={setNameEdit}
+                          onChange={(e) => setsetNameEdit(e.target.value)}
+                          id="standard-basic"
+                          label="Enter the Set's Edit Name"
+                          variant="outlined"
+                        />
+            <button
+                        className="button-control-btn"
+                        style={{ marginLeft: 15, marginTop: 6 }}
+                        onClick={submitSetNameEditHandler}
+                      >
+                        Submit
+                      </button>
+        </div>
+      )
+  }
+
+  const fetchSetName = (e) => {
+    e.preventDefault();
+    setactivateEditSetName(true);
+  }
+
+
+
+
+
+
   const renderSelectedControl = () => {
     if (isFieldNotComplete) {
       return <div className="alert">Please fill out the required fields.</div>;
@@ -729,10 +781,15 @@ function Control() {
                         }}
                       >
                         <p>Edit Set</p>
+                        <div>
+                          {renderEditSetName()}
+                        </div>
                       </div>
                       {allSetsDetails &&
                         allSetsDetails.map((set, index) => (
-                          <div className="column box">
+                          <div className="column box" style={{
+                            margin:50
+                          }}>
                             <p
                               style={{ textAlign: "center" }}
                               onClick={(e) => getQuestionDetail(e, set._id)}
@@ -748,6 +805,7 @@ function Control() {
                                 Edit
                               </button>
                               {set.setDescription === "Disable" ? (
+                                <>
                                 <button
                                   style={{
                                     backgroundColor: "#FFFFFF",
@@ -756,6 +814,16 @@ function Control() {
                                 >
                                   Enable
                                 </button>
+                                <button
+                                  style={{
+                                    backgroundColor: "#FFFFFF",
+                                    marginTop:15
+                                  }}
+                                  onClick={(e) => editSetNameHandler(e, set)}
+                                >
+                                  Edit Set Name
+                                </button>
+                                </>
                               ) : (
                                 <button
                                   style={{
